@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Todo-list</title>
+
+
+
+		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.6.0/remixicon.css" integrity="sha512-GL7EM8Lf8kU23I3kTio2kRWt8YRDVIQcSZjRVtVRfk05kB/QvkyafuTC94Ev0X6qk7Z0r5s06c1lsP1p/ezDYw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css" integrity="sha512-8RxmFOVaKQe/xtg6lbscU9DU0IRhURWEuiI0tXevv+lXbAHfkpamD4VKFQRto9WgfOJDwOZ74c/s9Yesv3VvIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/regular.min.js" integrity="sha512-T4H/jsKWzCRypzaFpVpYyWyBUhjKfp5e/hSD234qFO/h45wKAXba+0wG/iFRq1RhybT7dXxjPYYBYCLAwPfE0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.6.0/remixicon.min.css" integrity="sha512-pI8MMQ9fC050RkbUOr8cJ75T5bYJpT1PAiML/7QZM6Fr74Ef6csO2/Cl92q+Qpxidm7WonXr6f+DbyxNHPGH8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+<style rel="stylesheet" src="style.css"></style>
+<style>
+   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,500&family=Montserrat&family=Playfair+Display:wght@500&family=Poppins:ital,wght@0,200;0,300;0,400;0,600;1,300;1,500&family=Source+Sans+3:wght@400;600&family=Ubuntu&display=swap');
+	
+
+		*{
+		margin: 0;
+		padding: 0;
+		box-shadow: border-box;
+
+	}
+	body{
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: "Inter", sans-serif;
+		color: #2e2e2e;
+		background-color: #fff;
+	}
+	.wrapper{
+		height: 100vh;
+		width: 100%;
+		position: relative;
+		display: flex;
+		padding: 30px 0;
+		overflow: hidden;
+
+	}
+
+	@media (min-width: 768px){
+		.wrapper{
+			height: 40rem;
+
+			width: 22rem;
+			border: 6px solid #2e2e2e;
+			border-radius: 40px;
+		}
+	}
+
+	.screen-backdrop{
+		width: 130%;
+		border-radius: 0 0 50% 50%;
+		height: 25rem;
+		position: absolute;
+		top: 0;
+		z-index: -1;
+		left: 50%;
+		transition: all 0.2s;
+
+		transform: translate(-50%);
+		background-color: #f9ae85;
+	}
+	.menu-btn{
+		width: 2rem;
+		cursor: pointer;
+		color: #2e2e2e;
+	}
+	.menu-btn .bar{
+		font-size: 1.4rem;
+		font-weight: bold;
+
+	}
+	.head-wrapper{
+		padding: 0 30px;
+	}
+	.welcome{
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+	}
+	.welcome h3{
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: -0.3rem;
+	}
+	.welcome p{
+		font-weight: 500;
+		font-size: 0.9rem;
+	}
+	.welcome .img{
+		position: relative;
+	}
+	.welcome .img img{
+		width: 5rem;
+	}
+	.welcome .img .backdrop{
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 4rem;
+		height: 4rem;
+		border-radius: 50%;
+		z-index: -1;
+		background-color: #fdfbe5;
+	}
+
+	::-webkit-scrollbar{
+		width: 0;
+	}
+	.categories-wrapper{
+		margin-top: 1rem;
+		height: calc(100% - 8rem);
+		padding: 0 30px;
+		overflow: auto;
+		padding-bottom: auto;
+	}
+	.wrapper .screen{
+		flex: 1;
+		transition: all 0.2s;
+		min-width: 100%;
+	}
+	.categories{
+		padding-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		column-gap: 1rem;
+	}
+	.categories .category{
+		background-color: #fff;
+		border-radius: 0.5rem;
+		display: flex;
+		margin-top: 1rem;
+		align-items: center;
+		padding: 0.3rem 1rem;
+		cursor: pointer;
+		transition: all 0.4s;
+		justify-content: space-between;
+		box-shadow: 10px 10px 28px -25px rgba(0,0,0,0.75);
+	}
+	.categories .category:hover{
+		transform: translateY(-5px);
+		box-shadow: 10px 10px 28px -25px rgba(0,0,0,0.75);
+
+
+	}
+	.category .left{
+		display: flex;
+		gap:0.5rem;
+		align-items: center;
+	}
+	.category .left img{
+		width: 3rem;
+	}
+	.category .content{
+		/*border: 1px solid black;
+		margin-bottom: -2rem;
+		padding: 0;
+		margin-top: -1rem;
+	}
+	.category .content h3{
+		font-size: 1rem;
+		margin-bottom: -0.2rem;
+		font-weight: 600;
+	}
+	.category .content p{
+		color: #2e2e2e;
+		font-size: 0.8rem;
+		opacity: 0.4;
+	}
+	.category .toggle-btn{
+		width: 2rem;
+		cursor: pointer;
+		font-weight: 500;
+		/*visibility: hidden;*/
+	}
+	.category .options{
+		visibility: hidden;
+		opacity: 0;
+		transition: all 0.3s;
+
+	}
+	.categories:hover .options{
+		opacity: 1;
+		visibility: visible;
+	}
+	.wrapper.show-category .home-screen{
+		transform: translateX(100%);
+	}
+	.wrapper.show-category .category-screen{
+		transform: translateX(-100%);
+	}
+	.wrapper.show-category .screen-backdrop{
+		transform: translate(-50%, -60%);
+	}
+	.back{
+		font-size: 1.4rem;
+		font-weight: bold;
+		cursor: pointer;
+	}
+	.category-screen .head-wrapper{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.category-details{
+		padding: 0 30px;
+		margin-top: 7rem;
+		display: flex;
+		align-content: center;
+		column-gap: 1rem;
+
+	}
+	.category-details img{
+		width: 3rem;
+	}
+	.category-details .details p{
+		opacity: 0.6;
+		font-size: 0.8rem;
+		margin-bottom: -0.001rem;
+	}
+	.category-details .details h3{
+		font-size: 1.2rem;
+		font-weight: bold;
+
+	}
+	.tasks-wrapper{
+		padding: 0 30ox;
+		margin-top: 1rem;
+		height: calc(100% - 12rem);
+		padding-bottom: 20px;
+		overflow: auto;
+	}
+	.tasks{
+		padding-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		column-gap: 1rem;
+	}
+	.task-wrapper{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 30px;
+	}
+	.task{
+		display: flex;
+		align-items: center;
+		column-gap: 0.8rem;
+		text-align: center;
+		align-content: center;
+		justify-content: center;
+		font-size: 0.9rem;
+		font-size: 500;
+		width: max-content;
+		cursor: pointer;
+	}
+	.task input{
+		display: none;
+	}
+	.task .checkmark{
+		width: 1rem;
+		height: 1rem;
+		border-radius: 2px;
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #2e2e2e;
+	}
+	.task .checkmark .check{
+		width: 1rem;
+		color: #2e2e2e;
+		stroke-width: 3 ;
+		opacity: 0;
+		transition: all;
+		0.3s
+
+	}
+	.task:hover .checkmark .check{
+		opacity: 1;
+	}
+	.task input:checked~.checkmark{
+		background-color: #2e2e2e;
+	}
+	.task input:checked~.checkmark .check{
+		opacity: 1;
+		color: #fff;
+	}
+	.task input:checked~p{
+		text-decoration: line-through;
+		opacity: 0.8;
+	}
+	.task-wrapper .delete{
+		min-width: 2rem;
+		height: 2rem;
+		padding: 0.5rem;
+		margin-bottom: 1rem;
+
+		border-radius: 50%;
+		color: #2e2e2e;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		cursor: pointer;
+		opacity: 0;
+		transition: all 0.3s;
+		visibility: hidden;
+		background-color: rgba(0,0,0,0.031);
+	}
+	.task-wrapper:hover .delete{
+		visibility: visible;
+		opacity: 1;
+	}
+	.close{
+		padding-bottom: -1rem;
+		/*border: 2px solid  black;*/
+		padding-top: -1rem 0 0 0 ;
+		margin-top: 30rem;
+	}
+	.task-wrapper .delete:hover{
+		color: red;
+		background-color: rgba(0,0,0,0.1);
+	}
+	.add-task-btn{
+		position: absolute;
+		bottom: 1rem;
+		right: 1rem;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		background-color: #f9ae85;
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		/*z-index: 300;*/
+		transition: all 0.3s;
+
+
+	}
+	.add-task-btn.active{
+		z-index: 1;
+		bottom: 20rem;
+		transform: rotate(45deg);
+	}
+	.add-task-btn:hover{
+		transform: scale(1.1);
+
+	}
+	.add-task{
+		position: absolute;
+		bottom: -100%;
+		left: 0;
+		transition: all 0.3s;
+		width: 100%;
+		padding: 20px 30px;
+
+	}
+	.add-task.active{
+		bottom: 0;
+	}
+	.add-task .heading{
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+	}
+	.input-group{
+		position: relative;
+		margin-bottom: 20px;
+
+	}
+	.input-group input, .input-group label{
+		display: block;
+		width: 100%;
+
+	}
+	.input-group input, .input-group select{
+		width: 100%;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 10px;
+
+		font-size: 16px;
+	}
+	.input-group label{
+		width: max-content;
+		padding: 0 5px;
+		margin-top: 5px;
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 5px;
+	}
+	.btns{
+		display: flex;
+		gap: 1rem;
+		justify-content: flex-end;
+		align-items: center;
+
+
+	}
+	.btns button{
+		padding: 10px 20px;
+		z-index: 2;
+
+		border-radius: 5px;
+		border: none;
+		outline: none;
+		font-size: 14px;
+		cursor: pointer;
+		font-weight: 600;
+	}
+	.btns button.add-btn{
+		background-color: #f9ae85;
+		color: #2e2e2e;
+	}
+	.add-task-backdrop{
+		position: absolute;
+		bottom: 0;
+		width: 500px;
+		height: 22rem;
+		left: 50%;
+		transform: translateX(-50%);
+		border-radius: 50% 50% 0 0 ;
+		background-color: #fff;
+		/*border-top: 1px solid red;*/
+	}
+	.black-backdrop{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		backdrop-filter: blur(5px);
+		background-color: #00000023;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.3s;
+	}
+	.black-backdrop.active{
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.no-task{
+		margin-top: 5rem;
+		text-align: center;
+		font-size: 1.2rem;
+		opacity: 0.8;
+	}
+	.btn1{
+		/*border: 1px solid black;*/
+		display: flex;
+		align-items: center;
+		width: 100%;
+		justify-content: space-between;
+	}
+	.btn1 .barr{
+		font-weight: 600 ;
+		font-size: 1.3rem;
+	}
+	.slide{
+		/*border: 1px solid black;*/
+		width: 60%;
+		height: 100%;
+		position:absolute;
+		top:0;
+		right: 10rem;
+		transform: translateX(200%);
+		transition: 0.3s;
+		background-color: #fff;
+		/*display: none;*/
+		z-index: 30;
+		display: block;
+
+
+	}
+
+	.bar0{
+		font-size: 1.2rem;
+		padding: 3rem 1rem;
+		/*border: 1px solid black;*/
+
+	}
+	.color{
+		/*border: 1px solid black;*/
+		width: 100%;
+		text-align: center;
+		margin-top: 2rem;
+		font-size: 1rem;
+	}
+	.color h4{
+		/*border: 1px solid /**/;*/
+		font-weight: bold;
+		opacity: 0.5;
+	}
+	.colorsee{
+		/*border: 1px solid black;*/
+		margin-top: 1rem;
+		display: grid;
+		margin-left: 0.5rem;
+		gap: 1rem;
+		grid-template-columns: repeat(3, 1fr);
+
+	}
+	.colorchoose{
+		height: 3rem;
+		width: 3rem;
+		border-radius: 50%;
+
+			/*background-color: red;*/
+
+	}
+	.green{
+		background-color: green;
+	}
+	.red{
+		background-color: red;
+	}
+	.blue{
+		background-color: blue;
+	}
+	.yellow{
+		background-color: yellow;
+	}
+
+	.pink{
+		background-color: pink;
+	}
+	.voilet{
+		background-color: violet;
+	}
+	.orange{
+		background-color: orange;
+	}
+	.barr{
+		cursor: pointer;
+	}
+	.front{
+		position: absolute;
+		top: 0;
+		height: 100%;
+		text-align: center;
+		align-items: center;
+		align-content: center;
+		justify-content: center;
+		transition: 0.3s;
+		/*transform: translateY(-100%);*/
+		width: 100%;
+		background-color: white;
+		padding-top: 40%;
+		z-index: 400;
+	}
+	.name{
+		font-size: 1rem;
+
+	}
+	.name h3{
+		font-size: 1rem;
+		font-weight: 600;
+		font-family: "Poppins", sans-serif;
+	}
+	.inp{
+		margin-top: 10rem;
+		width: 100%;
+
+	}
+	.inp input{
+		border: 1px solid whitesmoke;
+		font-size: 0.9rem;
+		padding: 0.4rem 1rem;
+		font-family: "Poppins", sans-serif;
+		transition: 0.6s;
+
+	}
+	.inp input:focus{
+		border-bottom: 1px solid black;
+		transform-origin: middle;
+		outline: 0;
+	}
+	.button{
+		margin-top: 1rem;
+		width: 100%;
+	}
+	.button button{
+		width: 60%;
+		border-radius: 4px;
+		border: none;
+		outline: 0;
+		height: 2.5rem;
+		font-size: 0.9rem;
+		background-color: #9400FF;
+		color:whitesmoke;
+		font-weight: 600;
+
+
+	}
+		.category:nth-child(1){
+			filter: blur(5px);
+		}
+
+				.category:nth-child(3){
+			filter: blur(5px);
+		}
+
+		.category:nth-child(4){
+			filter: blur(5px);
+		}
+		.category:nth-child(5){
+			filter: blur(5px);
+		}
+		.category:nth-child(6){
+			filter: blur(5px);
+		}
+		.category:nth-child(7){
+			filter: blur(5px);
+		}
+		.category:nth-child(8){
+			filter: blur(5px);
+		}
+
+*/
+
+
+</style>
+
+</head>
+<body>
+
+
+
+<div class="wrapper">
+ 
+	<div class="front" >
+		<div class="name">
+			<h3>Enter your name.</h3>
+		</div>
+		<div class="inp">
+			<input type="text" class="textt" placeholder="Enter Name ..." name="" required>
+		</div>
+		<div class="button">
+			<button type="submit" value="submit">Add Name</button>
+		</div>
+		
+	</div>
+
+
+		<div class="slide">
+		<div class="bar0">
+			<i class="ri-close-fill" style="cursor: pointer;"></i>
+
+		</div>
+		<div class="color">
+			<h4>Choose Color</h4>
+			<div class="colorsee">
+				<div class="red colorchoose"></div>
+				<div class="blue colorchoose"></div>
+				<div class="green colorchoose"></div>
+				<div class="yellow colorchoose"></div>
+				<div class="pink colorchoose"></div>
+				<div class="voilet colorchoose"></div>
+				<div class="orange colorchoose"></div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="screen-backdrop"></div>
+	<div class="screen home-screen">
+		<div class="head-wrapper">
+			<div class="btn1">
+			<div class="menu-btn">
+				<i class="ri-bar-chart-horizontal-line bar"></i>
+			</div>
+			<div class="bar">
+				<i class="ri-more-2-line barr"></i>
+			</div>
+			</div>
+
+			<div class="welcome">
+				<div class="content">
+					<h3>Hello <span class="namechange"> Anas</span>.</h3>
+					<p>Today you have <span class="totalTasks">0</span> tasks</p>
+				</div>
+				<div class="img" style="z-index: 0;">
+					<div class="backdrop"></div>
+					<img src="https://cdn3d.iconscout.com/3d/premium/thumb/man-avatar-6299539-5187871.png?f=webp" style=" z-index: -1; max-height: 6rem;">
+				</div>
+			</div>
+		</div>
+
+		<div class="categories-wrapper">
+			<div class="categories">
+
+				<div class="category">
+					<div class="left">
+						<img src="https://static.vecteezy.com/system/resources/previews/016/766/342/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-transparent-background-png.png" style="max-height: 6rem;">
+						<div class="content">
+							<h3>Personal</h3>
+							<p>5 Tasks</p>
+						</div>
+					</div>
+					<div class="options">
+						<div class="toggle-btn">
+							<i class="ri-more-2-line"></i>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+
+
+
+
+	</div>
+
+
+	<div class="screen category-screen">
+		<div class="head-wrapper">
+			<div class="back-btn">
+				<i class="ri-arrow-left-s-line back"></i>
+			</div>
+
+			<div class="options">
+				<i class="ri-more-2-line"></i>
+				
+			</div>
+		</div>
+
+		<div class="category-details">
+			<img src="https://static.vecteezy.com/system/resources/previews/016/766/342/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-transparent-background-png.png" alt="category-img" style="max-height: 3rem;"id="category-img">
+			<div class="details">
+				<p class="category-tasks">10 Tasks</p>
+				<h3 class="category-title">Personal</h3>
+			</div>
+		</div>
+
+		<div class="tasks-wrapper">
+			<div class="tasks">
+				<div class="task-wrapper">
+					<label for="task" class="task">
+						<input type="checkbox" id="task" name="">
+						<span class="checkmark">
+							<i class="ri-check-double-line check"></i>
+						</span>
+						<p class=""></p>
+					</label>
+					<div class="delete">
+						<i class="ri-close-fill close"></i>
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="add-task-btn">
+				<i class="ri-add-fill add"></i>
+			</div>
+
+			<div class="black-backdrop">
+				
+			</div>
+
+			<div class="add-task">
+				<div class="add-task-backdrop"></div>
+				<h1 class="heading">Add Tasks</h1>
+				<div class="input-group">
+					<label for="task-input">Tasks</label>
+						<input type="text" id="task-input" name="" required>
+					
+				</div>
+
+				<div class="input-group">
+					<label for="category-select">Category</label>
+					<select name="" id="category-select">
+						<option value="personal">Personal</option>
+					</select>
+				</div>
+
+				<div class="btns">
+					<button class="cancel-btn">Cancel</button>
+					<button class="add-btn">Add</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+
+<script src="indexx.js"></script>
+
+
+<script>
+	
+</script>
+
+</body>
+</html>
